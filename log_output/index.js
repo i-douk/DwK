@@ -1,9 +1,12 @@
+const { v4: uuidv4 } = require('uuid');
+
 const getHashNow = () => {
-    const randomHash = Math.random().toString(36).substr(2, 6)
-    const date = new Date().toISOString()
-    console.log(date , randomHash)
-  
-    setTimeout(getHashNow, 5000)
+    const randomString = uuidv4();
+    
+    setInterval(() => {
+        const timestamp = new Date().toISOString();
+        console.log(`${timestamp}: ${randomString}`);
+      }, 5000);
   }
   
   getHashNow()
