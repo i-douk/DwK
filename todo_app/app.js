@@ -1,9 +1,10 @@
 
 const express = require('express')
 const app = express()
-const port = 3000
+const dotenv = require('dotenv');
+const port = process.env.PORT || 3000;
 
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.send('DevOps with Kubernetes!')
 })
 
