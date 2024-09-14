@@ -4,7 +4,7 @@ const app = express()
 const port = process.env.PORT || 3000;
 
 app.get('/hellokube', (_req, res) => {
-  res.send('DevOps with Kubernetes!')
+  res.send('DevOps with Kubernetes Todo App!')
 })
 
 app.listen(port, () => {

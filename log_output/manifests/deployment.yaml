@@ -6,12 +6,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: log_output
+      app: log-output
   template:
     metadata:
       labels:
-        app: log_output
+        app: log-output
     spec:
       containers:
         - name: log-output
           image: log-output
+          env:
+          - name: PORT
+            value: "3001"
