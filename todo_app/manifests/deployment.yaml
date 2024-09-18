@@ -15,6 +15,9 @@ spec:
       containers:
         - name: todo-app
           image: todo-app
+        - name: ping-pong
+          image: ping-pong
+          command: ["sh", "-c", "ulimit -n 65536 && npm start"]
           env:
           - name: PORT
             value: "3000"
