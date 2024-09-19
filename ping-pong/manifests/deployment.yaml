@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: todo-app-dep
+  name: ping-pong-dep
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: todo-app
+      app: ping-pong
   template:
     metadata:
       labels:
-        app: todo-app
+        app: ping-pong
     spec:
       containers:
-        - name: todo-app
-          image: todo-app
+        - name: ping-pong
+          image: ping-pong
           env:
           - name: PORT
-            value: "3001"
+            value: "3000"

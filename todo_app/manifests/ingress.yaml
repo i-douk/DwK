@@ -4,12 +4,20 @@ metadata:
   name: dwk-todo-app-ingress
 spec:
   rules:
-  - http:
+  - host: localhost
+    http:
       paths:
-      - path: /
+      - path: /hellokube
         pathType: Prefix
         backend:
           service:
             name: todo-app-svc
+            port:
+              number: 2345
+      - path: /pingpong
+        pathType: Prefix
+        backend:
+          service:
+            name: ping-pong-svc
             port:
               number: 2345
