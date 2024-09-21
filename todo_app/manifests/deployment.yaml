@@ -17,4 +17,4 @@ spec:
           image: todo-app
           env:
           - name: PORT
-            value: "3001"
+            value: "3000"

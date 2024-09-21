@@ -4,8 +4,7 @@ metadata:
   name: dwk-todo-app-ingress
 spec:
   rules:
-  - host: localhost
-    http:
+  - http:
       paths:
       - path: /hellokube
         pathType: Prefix
