@@ -1,48 +1,28 @@
-const Koa = require('koa')
-const path = require('path')
-const fs = require('fs')
-const { consoleOutput } = require('../log-output')
-const app = new Koa()
-const PORT = process.env.PORT || 3003
+const express = require('express');
+const app = express();
+const path = require('path');
+const fs = require('fs');
 
-const directory = path.join('/', 'usr', 'src', 'app', 'files')
-const filePath = path.join(directory, 'logs.txt')
+const port = process.env.PORT || 3001;
 
-const fileAlreadyExists = async () => new Promise(res => {
-  fs.stat(filePath, (err, stats) => {
-    if (err || !stats) return res(false)
-    return res(true)
+const directory = path.join('/', 'usr', 'src', 'app', 'files');
+const filePath = path.join(directory, 'logs.txt');
+
+
+const getFile = async () => new Promise(res => {
+  fs.readFile(filePath, (err, buffer) => {
+    if (err) return console.log('FAILED TO READ FILE', '----------------', err);
+    const jsonString = buffer.toString('utf-8');
+    res(jsonString)
   })
 })
 
-const saveToFile = async () => {
-  if (await fileAlreadyExists() == false) {
-    await new Promise(res => fs.mkdir(directory, (err) => res()))
-  }
+app.get('/', async (_req, res) => {
+     let readingOfFile = await getFile()
+    res.status(200).send(readingOfFile)
+  })
   
-  await new Promise(res => fs.writeFile(filePath, JSON.stringify(consoleOutput), err => {
-    console.log(consoleOutput.toString())
-    if (err) {
-      console.error(err);
-    } else {
-      res()
-      console.log('log file was saved')
-    }
-  }))
-}
+  app.listen(port, () => {
+      console.log(`Server started in port  ${port}`)
+  })
 
-const removeFile = async () => new Promise(res => fs.unlink(filePath, (err) => res()))
-
-app.use(async ctx => {
-  if (ctx.path.includes('favicon.ico')) return
-
-  await removeFile()
-  saveToFile()
-  ctx.status = 200
-});
-
-console.log('Started')
-
-saveToFile()
-
-app.listen(PORT)
