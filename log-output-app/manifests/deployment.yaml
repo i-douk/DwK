@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-output-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-output-app
+  template:
+    metadata:
+      labels:
+        app: log-output-app
+    spec:
+      volumes: # Define volume
+        - name: shared-logs
+          emptyDir: {}
+      containers:
+        - name: log-output
+          image: log-output
+          volumeMounts: # Mount volume
+          - name: shared-logs
+            mountPath: /usr/src/app/files
+        - name: logs-file
+          image: logs-file
+          volumeMounts: # Mount volume
+          - name: shared-logs
+            mountPath: /usr/src/app/files
