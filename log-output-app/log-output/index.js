@@ -7,14 +7,14 @@ const port = process.env.PORT || 3000;
 const { v4: uuidv4 } = require('uuid');
 
 const directory = path.join('/', 'usr', 'src', 'app', 'files');
-const filePath = path.join(directory, 'logs.txt');
+const filePath = path.join(directory, 'logs-persistent.txt');
 
 //Generate Hash and output it every 5s with timestamp
 const getHashNow = () => {
     const randomString = uuidv4();
     setInterval(() => {
         const timestamp = new Date().toISOString();
-        console.log(`${timestamp}: ${randomString}`);
+        console.log(`${timestamp}: ${randomString}\n`);
       }, 5000);
   }
 
@@ -22,7 +22,7 @@ const getHashNow = () => {
   let consoleOutput = [];
   const originalLog = console.log;
   console.log = function(message) {
-    consoleOutput.push(message);
+    consoleOutput.push(`${message} \n`);
     originalLog.apply(console, arguments);
   };
 
@@ -49,9 +49,9 @@ const saveAFile = async () => {
 
       fs.writeFile(filePath, JSON.stringify(consoleOutput), (err) => {
           if (err) {
-              console.error("Error writing to file", err);
+              console.error("Error writing to file \n", err);
           } else {
-              console.log("File written successfully\n");
+              console.log("File written successfully \n");
           }
       });
   } catch (error) {

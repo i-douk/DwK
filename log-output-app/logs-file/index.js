@@ -6,7 +6,7 @@ const fs = require('fs');
 const port = process.env.PORT || 3001;
 
 const directory = path.join('/', 'usr', 'src', 'app', 'files');
-const filePath = path.join(directory, 'logs.txt');
+const filePath = path.join(directory, 'logs-persistent.txt');
 
 
 const getFile = async () => new Promise(res => {

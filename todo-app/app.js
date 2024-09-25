@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Array to hold todos
 let todos = [];
 // Serve HTML form and display todos
-app.get('/hellokube', (_req, res) => {
+app.get('/todoapp', (_req, res) => {
   const todosList = todos?.map(todo => `<li>${todo}</li>`).join('');
   res.send(`
     <html>
@@ -34,7 +34,7 @@ app.post('/addtodo', (req, res) => {
   if (newTodo) {
     todos.push(newTodo);
   }
-  res.redirect('/hellokube');
+  res.redirect('/todoapp');
 });
 
 app.listen(port, () => {

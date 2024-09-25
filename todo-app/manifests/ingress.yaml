@@ -6,7 +6,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /hellokube
+      - path: /todoapp
         pathType: Prefix
         backend:
           service:
@@ -18,12 +18,5 @@ spec:
         backend:
           service:
             name: todo-app-svc
-            port:
-              number: 2345
-      - path: /pingpong
-        pathType: Prefix
-        backend:
-          service:
-            name: ping-pong-svc
             port:
               number: 2345
