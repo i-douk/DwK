@@ -18,8 +18,13 @@ const getFile = async () => new Promise(res => {
 })
 
 app.get('/', async (_req, res) => {
-     let readingOfFile = await getFile()
+  try {
+    let readingOfFile = await getFile()
     res.status(200).send(readingOfFile)
+
+  } catch (error) {
+   res.status.send(error)
+  }
   })
   
   app.listen(port, () => {

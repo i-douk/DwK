@@ -14,7 +14,8 @@ spec:
     spec:
       volumes: # Define volume
         - name: shared-logs
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: image-claim
       containers:
         - name: log-output
           image: log-output

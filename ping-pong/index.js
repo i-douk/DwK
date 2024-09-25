@@ -13,4 +13,5 @@ app.get('/pingpong', (_req, res) => {
   
   app.listen(port, () => {
       console.log(`Server started in port  ${port}`)
+      console.log(`Ping/Pong : ${counter()}`)
   })
