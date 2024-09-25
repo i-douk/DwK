@@ -13,6 +13,13 @@ spec:
             name: todo-app-svc
             port:
               number: 2345
+      - path: /addtodo  # Add this path to handle the POST request
+        pathType: Prefix
+        backend:
+          service:
+            name: todo-app-svc
+            port:
+              number: 2345
       - path: /pingpong
         pathType: Prefix
         backend:
