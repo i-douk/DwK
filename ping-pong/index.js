@@ -8,21 +8,22 @@ const directory = path.join('/', 'usr', 'src', 'app', 'files');
 const filePath = path.join(directory, 'logs-persistent.txt');
 let count = 0;
 const counter = () => {
-    return ++count;
+    return count++;
 }
 
 // Save output logs to file
 const saveToFile = async () => {
   
-    fs.appendFile(filePath, `Ping / Pong : ${counter}` , (err) => {
+    fs.appendFile(filePath, `Ping / Pong : ${count} ` , (err) => {
         if (err) throw err;
         console.log('Output from second pod appended to the log file!');
     });
   }
 
 app.get('/pingpong', async (_req, res) => {
-    await saveToFile()
-    res.status(200).send(`pong ${counter()}`);
+    counter();
+    await saveToFile();
+    res.status(200).send(`pong ${count}`);
 });
   
   app.listen(port, () => {
