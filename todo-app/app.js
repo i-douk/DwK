@@ -7,12 +7,12 @@ const bodyParser = require('body-parser');
 const port = process.env.PORT || 3000; 
 
 // Serve static files from the 'files' folder under the '/files' route
-app.use('/todos/files', express.static('files'));
+app.use('/files', express.static('files'));
 
 
 // Example URL for accessing an image (through the load balancer)
-const baseStaticUrl = `http://localhost:8081/files/image.jpg`;
-
+let baseStaticUrl ;
+const placeholderPic = "https://fastly.picsum.photos/id/870/1200/1200.jpg?hmac=BnXJRw-CpRuDMItTXgds2IE4BpY3658olMlQl8pRzpY"
 const directory = path.join('/', 'usr', 'src', 'app', 'files');
 const filePath = path.join(directory, 'image.jpg');
 
@@ -25,7 +25,9 @@ const fileAlreadyExists = async () => new Promise(res => {
 });
 
 const saveAPicture = async () => {
-  if (await fileAlreadyExists()) return;
+  if (!(await (fileAlreadyExists()))) {
+    return baseStaticUrl = placeholderPic;
+  };
   await new Promise(res => fs.mkdir(directory, { recursive: true }, (_err) => res()));
   const response = await axios.get('https://picsum.photos/1200', { responseType: 'stream' });
   await new Promise((resolve, reject) => {
@@ -34,6 +36,7 @@ const saveAPicture = async () => {
     writer.on('finish', resolve);
     writer.on('error', reject);
   });
+  baseStaticUrl = `http://localhost:8081/files/image.jpg`;
 };
 
 // Use body-parser middleware to parse form data
@@ -73,13 +76,14 @@ app.post('/addtodo', (req, res) => {
   if (newTodo) {
     todos.push(newTodo);
   }
-  res.redirect('/todos'); // Corrected the redirection to '/todos'
+  res.redirect('/todos');
 });
 
 // Start the server and save the image every hour
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Server started on port ${port}`);
+  await saveAPicture()
   setInterval(async () => {
     await saveAPicture();
-  }, 60 * 60 * 1000); // Save a picture every hour
+  }, 60 * 60 * 1000); 
 });
