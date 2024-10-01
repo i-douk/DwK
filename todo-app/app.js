@@ -5,16 +5,14 @@ const fs = require('fs');
 const axios = require('axios');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3000; 
-
-// Serve static files from the 'files' folder under the '/files' route
-app.use('/files', express.static('files'));
-
-
-// Example URL for accessing an image (through the load balancer)
-let baseStaticUrl ;
-const placeholderPic = "https://fastly.picsum.photos/id/870/1200/1200.jpg?hmac=BnXJRw-CpRuDMItTXgds2IE4BpY3658olMlQl8pRzpY"
 const directory = path.join('/', 'usr', 'src', 'app', 'files');
 const filePath = path.join(directory, 'image.jpg');
+app.use('/todos', express.static('files'));
+
+// Use body-parser middleware to parse form data
+app.use(bodyParser.urlencoded({ extended: true }));
+// Example URL for accessing an image (through the load balancer)
+baseStaticUrl = `http://localhost:8081/todos/image.jpg`;
 
 // Check if the file already exists
 const fileAlreadyExists = async () => new Promise(res => {
@@ -25,22 +23,33 @@ const fileAlreadyExists = async () => new Promise(res => {
 });
 
 const saveAPicture = async () => {
-  if (!(await (fileAlreadyExists()))) {
-    return baseStaticUrl = placeholderPic;
-  };
+   // Delete the file if it already exists to force overwriting
+   if (await fileAlreadyExists()) {
+    await new Promise((res, rej) => {
+      fs.unlink(filePath, (err) => {
+        if (err) return rej(err);
+        res();
+      });
+    });
+  }
+
+  // Ensure directory exists
   await new Promise(res => fs.mkdir(directory, { recursive: true }, (_err) => res()));
+
+  // Fetch the image
   const response = await axios.get('https://picsum.photos/1200', { responseType: 'stream' });
-  await new Promise((resolve, reject) => {
-    const writer = fs.createWriteStream(filePath);
-    response.data.pipe(writer);
+
+  // Pipe the response stream to the file
+  const writer = fs.createWriteStream(filePath);
+  response.data.pipe(writer);
+
+  // Return a promise that resolves when the file writing is complete
+  return new Promise((resolve, reject) => {
     writer.on('finish', resolve);
     writer.on('error', reject);
   });
-  baseStaticUrl = `http://localhost:8081/files/image.jpg`;
 };
 
-// Use body-parser middleware to parse form data
-app.use(bodyParser.urlencoded({ extended: true }));
 
 // Array to hold todos
 let todos = [];
@@ -81,9 +90,9 @@ app.post('/addtodo', (req, res) => {
 
 // Start the server and save the image every hour
 app.listen(port, async () => {
-  console.log(`Server started on port ${port}`);
   await saveAPicture()
+  console.log(`Server started on port ${port}`);
   setInterval(async () => {
     await saveAPicture();
-  }, 60 * 60 * 1000); 
+  }, 60*60*1000); 
 });
