@@ -66,6 +66,9 @@ const saveLogsPeriodically = () => {
   }, 10000); 
 }
 
+app.get('/', async (_req, res) => {
+  res.status(200).send(`<div>${getHashNow()}</div>`);
+});
   
   app.listen(port, async() => {
       
