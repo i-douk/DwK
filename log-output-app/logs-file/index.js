@@ -21,7 +21,6 @@ app.get('/', async (_req, res) => {
   try {
     let readingOfFile = await getFile()
     res.status(200).send(readingOfFile)
-
   } catch (error) {
    res.status.send(error)
   }

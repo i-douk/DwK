@@ -14,7 +14,7 @@ const getHashNow = () => {
     const randomString = uuidv4();
     setInterval(() => {
         const timestamp = new Date().toISOString();
-        console.log(`${timestamp}: ${randomString}\n`);
+        console.log(`${timestamp}: ${randomString} `);
       }, 5000);
   }
 
@@ -22,7 +22,7 @@ const getHashNow = () => {
   let consoleOutput = [];
   const originalLog = console.log;
   console.log = function(message) {
-    consoleOutput.push(`${message} \n`);
+    consoleOutput.push(`${message} `);
     originalLog.apply(console, arguments);
   };
 
@@ -49,13 +49,13 @@ const saveAFile = async () => {
 
       fs.writeFile(filePath, JSON.stringify(consoleOutput), (err) => {
           if (err) {
-              console.error("Error writing to file \n", err);
+              console.error("Error writing to file ", err);
           } else {
-              console.log("File written successfully \n");
+              console.log("File written successfully ");
           }
       });
   } catch (error) {
-      console.error("Error in saveAFile", error);
+      console.error("Error in saveAFile ", error);
   }
 }
 
@@ -66,13 +66,20 @@ const saveLogsPeriodically = () => {
   }, 10000); 
 }
 
-app.get('/', async (_req, res) => {
-  res.status(200).send(`<div>${getHashNow()}</div>`);
+app.get('/logs', (_req, res) => {
+  try {
+    res.status(200).json(
+      consoleOutput.map(log => ({
+        logs: log
+      }))
+    );
+  } catch (error) {
+    res.status(500).send(error.message); 
+  }
 });
   
-  app.listen(port, async() => {
-      
-      console.log(`Server started in port  ${port}`)
+  app.listen(port, () => {
+      console.log(`Server started in port ${port} `)
       getHashNow()
       saveLogsPeriodically(); 
   })
