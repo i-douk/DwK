@@ -12,17 +12,17 @@ const counter = () => {
 }
 
 // Save output logs to file
-const saveToFile = async () => {
+// const saveToFile = async () => {
   
-    fs.appendFile(filePath, `Ping / Pong : ${count} ` , (err) => {
-        if (err) throw err;
-        console.log('Output from second pod appended to the log file!');
-    });
-  }
+//     fs.appendFile(filePath, `Ping / Pong : ${count} ` , (err) => {
+//         if (err) throw err;
+//         console.log('Output from second pod appended to the log file!');
+//     });
+//   }
 
 app.get('/pingpong', async (_req, res) => {
     counter();
-    await saveToFile();
+    // await saveToFile();
     res.status(200).send(`pong ${count}`);
 });
   

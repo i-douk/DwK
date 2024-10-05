@@ -1,13 +1,13 @@
 const express = require('express');
 const app = express();
-const path = require('path');
-const fs = require('fs');
+// const path = require('path');
+// const fs = require('fs');
 
 const port = process.env.PORT || 3000;
 const { v4: uuidv4 } = require('uuid');
 
-const directory = path.join('/', 'usr', 'src', 'app', 'files');
-const filePath = path.join(directory, 'logs-persistent.txt');
+// const directory = path.join('/', 'usr', 'src', 'app', 'files');
+// const filePath = path.join(directory, 'logs-persistent.txt');
 
 //Generate Hash and output it every 5s with timestamp
 const getHashNow = () => {
@@ -27,46 +27,46 @@ const getHashNow = () => {
   };
 
 
-//Check if the file already exists
-  const fileAlreadyExists = async () => new Promise(res => {
-    fs.stat(filePath, (err, stats) => {
-      if (err || !stats) return res(false)
-      return res(true)
-    })
-  })
+// //Check if the file already exists
+//   const fileAlreadyExists = async () => new Promise(res => {
+//     fs.stat(filePath, (err, stats) => {
+//       if (err || !stats) return res(false)
+//       return res(true)
+//     })
+//   })
 
-// Save output logs to file
-const saveAFile = async () => {
-  try {
-      if (!(await fileAlreadyExists())) {
-          await new Promise((res, rej) => {
-              fs.mkdir(directory, { recursive: true }, (err) => {
-                  if (err) rej(err);
-                  else res();
-              });
-          });
-      }
+// // Save output logs to file
+// const saveAFile = async () => {
+//   try {
+//       if (!(await fileAlreadyExists())) {
+//           await new Promise((res, rej) => {
+//               fs.mkdir(directory, { recursive: true }, (err) => {
+//                   if (err) rej(err);
+//                   else res();
+//               });
+//           });
+//       }
 
-      fs.writeFile(filePath, JSON.stringify(consoleOutput), (err) => {
-          if (err) {
-              console.error("Error writing to file ", err);
-          } else {
-              console.log("File written successfully ");
-          }
-      });
-  } catch (error) {
-      console.error("Error in saveAFile ", error);
-  }
-}
+//       fs.writeFile(filePath, JSON.stringify(consoleOutput), (err) => {
+//           if (err) {
+//               console.error("Error writing to file ", err);
+//           } else {
+//               console.log("File written successfully ");
+//           }
+//       });
+//   } catch (error) {
+//       console.error("Error in saveAFile ", error);
+//   }
+// }
 
-// Periodically save logs to the file every 10 seconds
-const saveLogsPeriodically = () => {
-  setInterval(async () => {
-      await saveAFile();
-  }, 10000); 
-}
+// // Periodically save logs to the file every 10 seconds
+// const saveLogsPeriodically = () => {
+//   setInterval(async () => {
+//       await saveAFile();
+//   }, 10000); 
+// }
 
-app.get('/logs', (_req, res) => {
+app.get('/', (_req, res) => {
   try {
     res.status(200).json(
       consoleOutput.map(log => ({
@@ -74,13 +74,13 @@ app.get('/logs', (_req, res) => {
       }))
     );
   } catch (error) {
-    res.status(500).send(error.message); 
+    res.send(error); 
   }
 });
   
   app.listen(port, () => {
       console.log(`Server started in port ${port} `)
       getHashNow()
-      saveLogsPeriodically(); 
+      // saveLogsPeriodically(); 
   })
 
