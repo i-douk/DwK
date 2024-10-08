@@ -52,8 +52,8 @@ const saveAPicture = async () => {
 
 
 // Array to hold todos
-let todosFetching = await axios.get('http://localhost:8081/api/todos');
-let todos = Object.values(todosFetching)
+let todos = [];
+
 // Serve HTML form and display todos
 app.get('/todos', async (_req, res) => {
   const todosList = todos?.map(todo => `<li>${todo}</li>`).join('');
@@ -80,10 +80,10 @@ app.get('/todos', async (_req, res) => {
 });
 
 // Handle form submission to add a todo
-app.post('/addtodo', async (req, res) => {
+app.post('/addtodo', (req, res) => {
   const newTodo = req.body.todo;
   if (newTodo) {
-    await axios.post('http://localhost:8081/api/addtodo', newTodo );
+    todos.push(newTodo);
   }
   res.redirect('/todos');
 });
