@@ -6,17 +6,24 @@ spec:
   rules:
   - http:
       paths:
-      - path: /todos
+      - path: /todoapp
         pathType: Prefix
         backend:
           service:
             name: todo-app-svc
             port:
               number: 2345
-      - path: /addtodo  # Add this path to handle the POST request
+      - path: /todos 
         pathType: Prefix
         backend:
           service:
-            name: todo-app-svc
+            name: todo-backend-svc
+            port:
+              number: 2345
+      - path: /addtodo 
+        pathType: Prefix
+        backend:
+          service:
+            name: todo-backend-svc
             port:
               number: 2345
