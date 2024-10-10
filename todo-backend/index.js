@@ -5,6 +5,8 @@ const port = process.env.PORT || 3001;
 
 // Middleware for parsing JSON data
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 // Array to hold todos
 let todos = [];
@@ -15,12 +17,17 @@ app.get('/todos', (_req, res) => {
 });
 
 // API endpoint to add a new todo
-app.post('/addtodo', (req, res) => {
+app.post('/todos', (req, res) => {
   const newTodo = req.body.todo;
-  if (newTodo) {
-    todos.push(newTodo);
+  try {
+    console.log(newTodo);
+    if (newTodo) {
+      todos.push(newTodo); 
+    }
+  } catch (error){
+    console.log(error)
   }
-  res.status(201).json({ message: 'Todo added successfully' });
+  res.redirect('/todoapp');
 });
 
 // Start the server
