@@ -1,10 +1,12 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 // const path = require('path');
 // const fs = require('fs');
-
+const axios = require('axios')
 const port = process.env.PORT || 3000;
 const { v4: uuidv4 } = require('uuid');
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // const directory = path.join('/', 'usr', 'src', 'app', 'files');
 // const filePath = path.join(directory, 'logs-persistent.txt');
@@ -78,9 +80,11 @@ app.get('/', (_req, res) => {
   }
 });
   
-  app.listen(port, () => {
-      console.log(`Server started in port ${port} `)
-      getHashNow()
+  app.listen(port, async () => {
+      console.log(`Server started in port ${port} `);
+      getHashNow();
+      let pingpongOutput = await axios.get('http://ping-pong-svc.apps.svc.cluster.local:2345/pingpong');
+      console.log(pingpongOutput);
       // saveLogsPeriodically(); 
   })
 
