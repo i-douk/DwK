@@ -83,8 +83,11 @@ app.get('/', (_req, res) => {
   app.listen(port, async () => {
       console.log(`Server started in port ${port} `);
       getHashNow();
-      let pingpongOutput = await axios.get('http://ping-pong-svc.apps.svc.cluster.local:2345/pingpong');
-      console.log(pingpongOutput);
+      let pingpongOutput;
+      setInterval(async () => {
+         pingpongOutput = await axios.get('http://ping-pong-svc.apps.svc.cluster.local:2345/pingponglog');
+         console.log(pingpongOutput.data);
+    }, 10000);
       // saveLogsPeriodically(); 
   })
 

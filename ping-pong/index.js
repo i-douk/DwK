@@ -25,6 +25,9 @@ app.get('/pingpong', async (_req, res) => {
     // await saveToFile();
     res.status(200).send(`pong ${count}`);
 });
+app.get('/pingponglog', async (_req, res) => {
+    res.status(200).send(`Ping / Pong ${count}`);
+});
   
   app.listen(port, () => {
       console.log(`Server started in port  ${port}`)
