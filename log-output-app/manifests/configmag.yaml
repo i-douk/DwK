@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: information-configmap
+data:
+  information.txt: |
+    FILE_CONTENT='this text is from file'

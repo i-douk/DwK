@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
@@ -7,6 +8,7 @@ const axios = require('axios')
 const port = process.env.PORT || 3000;
 const { v4: uuidv4 } = require('uuid');
 app.use(bodyParser.urlencoded({ extended: true }));
+const API_KEY = process.env.API_KEY
 
 // const directory = path.join('/', 'usr', 'src', 'app', 'files');
 // const filePath = path.join(directory, 'logs-persistent.txt');
