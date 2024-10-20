@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '/usr/src/app/manifests/information.env' });
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
