@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config({ path: '/usr/src/app/manifests/information.env' });
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
@@ -8,7 +8,8 @@ const axios = require('axios')
 const port = process.env.PORT || 3000;
 const { v4: uuidv4 } = require('uuid');
 app.use(bodyParser.urlencoded({ extended: true }));
-const API_KEY = process.env.API_KEY
+const FILE_CONTENT = process.env.FILE_CONTENT;
+const MESSAGE = process.env.MESSAGE;
 
 // const directory = path.join('/', 'usr', 'src', 'app', 'files');
 // const filePath = path.join(directory, 'logs-persistent.txt');
@@ -87,7 +88,9 @@ app.get('/', (_req, res) => {
       getHashNow();
       let pingpongOutput;
       setInterval(async () => {
-         pingpongOutput = await axios.get('http://ping-pong-svc.apps.svc.cluster.local:2345/pingponglog');
+        console.log('file content:', FILE_CONTENT);
+        console.log('env variable:' , MESSAGE);
+        pingpongOutput = await axios.get('http://ping-pong-svc.apps.svc.cluster.local:2345/pingponglog');
          console.log(pingpongOutput.data);
     }, 10000);
       // saveLogsPeriodically(); 
