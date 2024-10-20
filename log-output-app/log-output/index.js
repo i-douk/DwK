@@ -2,17 +2,18 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-// const path = require('path');
-// const fs = require('fs');
+const path = require('path');
 const axios = require('axios')
 const port = process.env.PORT || 3000;
 const { v4: uuidv4 } = require('uuid');
 app.use(bodyParser.urlencoded({ extended: true }));
-const FILE_CONTENT = process.env.FILE_CONTENT;
 const MESSAGE = process.env.MESSAGE;
 
 // const directory = path.join('/', 'usr', 'src', 'app', 'files');
 // const filePath = path.join(directory, 'logs-persistent.txt');
+
+const fs = require('fs');
+const filePath = '/config/information.txt'; 
 
 //Generate Hash and output it every 5s with timestamp
 const getHashNow = () => {
@@ -88,8 +89,13 @@ app.get('/', (_req, res) => {
       getHashNow();
       let pingpongOutput;
       setInterval(async () => {
-        console.log('file content:', FILE_CONTENT);
-        console.log('env variable:' , MESSAGE);
+        fs.readFile(filePath, 'utf8', (err, data) => {
+          if (err) {
+            console.error('Error reading file:', err);
+          } else {
+            console.log('File content:', data);
+          }
+        });        console.log('env variable:' , MESSAGE);
         pingpongOutput = await axios.get('http://ping-pong-svc.apps.svc.cluster.local:2345/pingponglog');
          console.log(pingpongOutput.data);
     }, 10000);
