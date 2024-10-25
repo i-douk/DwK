@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const path = require('path');
+// const path = require('path');
 const axios = require('axios')
 const port = process.env.PORT || 3000;
 const { v4: uuidv4 } = require('uuid');
