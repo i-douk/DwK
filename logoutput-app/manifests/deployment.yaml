@@ -14,4 +14,4 @@ spec:
     spec:
       containers:
         - name: logoutput-container
-          image: logoutput-app:latest
+          image: logoutput-app
