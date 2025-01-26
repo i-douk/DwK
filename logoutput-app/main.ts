@@ -21,4 +21,4 @@ const handler = (_req: Request): Response => {
   });
 };
 
-Deno.serve({ port: 4242, hostname: "127.0.0.1" }, handler);
+Deno.serve({ port: 4242}, handler);
