@@ -2,4 +2,4 @@ const handler = async (_req : Request):Promise<Response> => {
   return new Response("Server running on port 4242");
 }
  
-Deno.serve({port: 4243}, handler);
+Deno.serve({port: 4243 , hostname:"127.0.0.1"},  handler);
