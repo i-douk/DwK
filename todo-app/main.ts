@@ -1,5 +1,5 @@
 const handler = async (_req : Request):Promise<Response> => {
-  return new Response("Server running on port 4242");
+  return new Response("Server running on port 4243");
 }
  
-Deno.serve({port: 4243 , hostname:"127.0.0.1"},  handler);
+Deno.serve({port: 4243},  handler);
