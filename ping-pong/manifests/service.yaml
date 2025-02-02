@@ -9,4 +9,4 @@ spec:
   ports:
     - port: 2347
       protocol: TCP
-      targetPort: 4242
+      targetPort: 4245
