@@ -12,6 +12,9 @@ spec:
       labels:
         app: logoutput-app
     spec:
+      volumes:
+        - name: logoutput-volume
+          emptyDir: {}
       containers:
         - name: logoutput-container
           image: logoutput-app:latest
