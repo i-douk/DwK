@@ -16,5 +16,7 @@ spec:
         - name: logoutput-volume
           emptyDir: {}
       containers:
-        - name: logoutput-container
-          image: logoutput-app:latest
+        - name: logoutput-writer-container
+          image: logoutput-writer:latest
+        - name: logoutput-reader-container
+          image: logoutput-reader:latest
