@@ -18,5 +18,11 @@ spec:
       containers:
         - name: logoutput-writer-container
           image: logoutput-writer:latest
+          volumeMounts:
+            - name: logoutput-volume
+              mountPath: /usr/src/app/files
         - name: logoutput-reader-container
           image: logoutput-reader:latest
+          volumeMounts:
+            - name: logoutput-volume
+              mountPath: /usr/src/app/files
