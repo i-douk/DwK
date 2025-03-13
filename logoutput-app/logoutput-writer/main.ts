@@ -7,18 +7,17 @@ const randomString = uuid.v1.generate();
 const encoder = new TextEncoder();
 
 let timer: number;
-const writer = openFile.writable.getWriter();
 
 const generateLogs = () => {
   timer = setInterval(async () => {
+    const writer = openFile.writable.getWriter();
     const logEntry = new Date().toISOString() + ": " + randomString + "\n";
     try {
       await writer.write(encoder.encode(logEntry));
-      openFile.close();
     } catch (error) {
       console.error("Failed to write log entry:", error);
     } finally {
-      await writer.close();
+      writer.releaseLock();
     }
   }, 5000);
 };
