@@ -4,8 +4,11 @@ EXPOSE 4242
 
 WORKDIR /app
 
+# Intended to fix the permission issue.
+RUN mkdir -p /usr/src/app/files && chmod -R 777 /usr/src/app/files
+
 # Prefer not to run as root.
-USER deno
+USER root
 
 
 # Copy application files.

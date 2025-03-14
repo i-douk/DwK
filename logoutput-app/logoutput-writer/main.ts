@@ -1,23 +1,20 @@
 import * as uuid from "jsr:@std/uuid";
 
-const logDir = '/usr/src/app/files';
-const logFilePath = `${logDir}/stream.log`;
-const openFile = await Deno.open(logFilePath, { write: true, create: true, append: true });
-const randomString = uuid.v1.generate();
+const logDir = "/usr/src/app/files";
+const logFilePath = `${logDir}/logs.txt`;
 const encoder = new TextEncoder();
-
-let timer: number;
+const randomString = uuid.v1.generate();
 
 const generateLogs = () => {
-  timer = setInterval(async () => {
-    const writer = openFile.writable.getWriter();
+  setInterval(async () => {
     const logEntry = new Date().toISOString() + ": " + randomString + "\n";
     try {
+      const file = await Deno.open(logFilePath, { write: true, truncate: true, create: true });
+      const writer = file.writable.getWriter();
       await writer.write(encoder.encode(logEntry));
+      await writer.close();
     } catch (error) {
       console.error("Failed to write log entry:", error);
-    } finally {
-      writer.releaseLock();
     }
   }, 5000);
 };

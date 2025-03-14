@@ -14,7 +14,8 @@ spec:
     spec:
       volumes:
         - name: logoutput-volume
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: logoutput-claim
       containers:
         - name: logoutput-writer-container
           image: logoutput-writer:latest
@@ -23,6 +24,11 @@ spec:
               mountPath: /usr/src/app/files
         - name: logoutput-reader-container
           image: logoutput-reader:latest
+          volumeMounts:
+            - name: logoutput-volume
+              mountPath: /usr/src/app/files
+        - name: pingpong-container
+          image: pingpong-app:latest
           volumeMounts:
             - name: logoutput-volume
               mountPath: /usr/src/app/files

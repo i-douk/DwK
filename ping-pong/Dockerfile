@@ -5,8 +5,11 @@ EXPOSE 4247
 
 WORKDIR /app
 
+# Intended to fix the permission issue.
+RUN mkdir -p /usr/src/app/files && chmod -R 777 /usr/src/app/files
+
 # Prefer not to run as root.
-USER deno
+USER root
 
 # These steps will be re-run upon each file change in your working directory:
 COPY . .

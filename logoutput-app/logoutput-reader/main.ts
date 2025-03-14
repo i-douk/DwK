@@ -1,5 +1,5 @@
 const logDir = "/usr/src/app/files";
-const filePath = `${logDir}/stream.log`;
+const filePath = `${logDir}/logs.txt`;
 const handler = async (_req: Request): Promise<Response> => {
 const file = await Deno.open(filePath);
   try {
