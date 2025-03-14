@@ -1,6 +1,4 @@
 {
-  "name" : "@project/v0-1",
-  "version": "1.0.0",
   "tasks": {
     "dev": "deno run --watch main.ts"
   },
