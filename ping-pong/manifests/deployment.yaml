@@ -14,11 +14,4 @@ spec:
     spec:
       containers:
         - name: pingpong-app
-          image: pingpong-app:latest  
-          volumeMounts:
-            - name: ping-logoutput-volume
-              mountPath: /usr/src/app/files/
-      volumes:
-        - name: ping-logoutput-volume
-          persistentVolumeClaim:
-            claimName: ping-logoutput-claim
+          image: pingpong-app:latest 
