@@ -1,0 +1,61 @@
+let isFirstRender = true;
+// Simple HTML sanitization to prevent XSS vulnerabilities.
+function sanitizeHtml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+export async function render(document, todos) {
+  if (isFirstRender) {
+    const jsonResponse = await fetch(`/data`);
+    const imageResponse = await fetch(`/image`);
+    if (jsonResponse.ok && imageResponse.ok) {
+      const jsonData = await jsonResponse.json();
+      const todos = jsonData;
+      const imageBlob = await imageResponse.blob();
+      const imageUrl = URL.createObjectURL(imageBlob);
+      let html = `<img src=${imageUrl} alt='image'>`;  
+      html += "<ul>";  
+      for (const item of todos) {
+        html += `<li>${sanitizeHtml(item)}</li>`;
+      }
+      html += "</ul><input>";
+      html += "<button>Add</button>";
+      document.body.innerHTML = html;
+      isFirstRender = false;
+    } else {
+      document.body.innerHTML = "<p>Something went wrong.</p>";
+    }
+  } else {
+    let html = "<ul>";
+    for (const item of todos) {
+      html += `<li>${sanitizeHtml(item)}</li>`;
+    }
+    html += "</ul>";
+    document.querySelector("ul").outerHTML = html;
+  }
+}
+
+export function addEventListeners() {
+  document.querySelector("button").addEventListener("click", async () => {
+    const item = document.querySelector("input").value;
+    const todos = Array.from(document.querySelectorAll("li"), e => e.innerText);
+    todos.push(item);
+    const response = await fetch("/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ item }),
+    });
+    if (response.ok) {
+      render(document, todos, port);
+    } else {
+      console.error("Something went wrong.");
+    }
+  });
+}
