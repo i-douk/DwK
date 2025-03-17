@@ -29,6 +29,6 @@ spec:
               mountPath: /usr/src/app/files
         - name: pingpong-container
           image: pingpong-app:latest
-          volumeMounts:
-            - name: logoutput-volume
-              mountPath: /usr/src/app/files
+          # volumeMounts:
+          #   - name: logoutput-volume
+          #     mountPath: /usr/src/app/files
