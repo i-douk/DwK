@@ -1,5 +1,6 @@
 const port = 8081;
 let isFirstRender = true;
+
 // Simple HTML sanitization to prevent XSS vulnerabilities.
 function sanitizeHtml(text) {
   return text
@@ -11,6 +12,10 @@ function sanitizeHtml(text) {
 }
 
 export async function render(document, todos) {
+  if (typeof window !== "undefined" && window.performance && window.performance.navigation.type === 1) {
+    isFirstRender = true;
+  }
+
   if (isFirstRender) {
     const jsonResponse = await fetch(`http://localhost:${port}/data`);
     const imageResponse = await fetch(`http://localhost:${port}/image`);
@@ -32,12 +37,18 @@ export async function render(document, todos) {
       document.body.innerHTML = "<html><body><p>Something went wrong.</p></body></html>";
     }
   } else {
-    let html = "<ul>";
-    for (const item of todos) {
-      html += `<li>${sanitizeHtml(item)}</li>`;
+    const ulElement = document.querySelector("ul");
+    if (ulElement) {
+      let html = "<ul>";
+      for (const item of todos) {
+        html += `<li>${sanitizeHtml(item)}</li>`;
+      }
+      html += "</ul>";
+      ulElement.outerHTML = html;
+    } else {
+      isFirstRender = true;
+      render(document, todos);
     }
-    html += "</ul>";
-    document.querySelector("ul").outerHTML = html;
   }
 }
 
