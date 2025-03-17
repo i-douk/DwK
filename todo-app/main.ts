@@ -23,7 +23,7 @@ const router = new Router();
 router.get("/client.js", async (context) => {
   context.response.type = "application/javascript";
   await context.send({
-    root: Deno.cwd(),
+    root: "./",
     index: "client.js",
   });
 });
@@ -35,11 +35,8 @@ router.get("/", (context) => {
   );
   render(document, { todos });
   context.response.type = "text/html";
-  if(document) {
-    context.response.body = `${document.body.innerHTML}${html}`;
-  }else{
-    context.response.body = html;
-  }
+    context.response.body = `${document?.body.innerHTML}${html}`;
+
 });
 
 // serve todos
@@ -66,7 +63,7 @@ router.post("/add", async (context) => {
 const app = new Application();
 
 app.use(oakCors({
-  origin: `http://localhost:${port}`,
+  origin: [`http://localhost:${port}`, `http://localhost:8000`],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
 }));
@@ -76,5 +73,4 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 
-// listen on port 4243
-await app.listen({ port : 8000 });
+await app.listen({ port : 8081 });

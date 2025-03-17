@@ -1,3 +1,4 @@
+const port = 8081;
 let isFirstRender = true;
 // Simple HTML sanitization to prevent XSS vulnerabilities.
 function sanitizeHtml(text) {
@@ -11,24 +12,24 @@ function sanitizeHtml(text) {
 
 export async function render(document, todos) {
   if (isFirstRender) {
-    const jsonResponse = await fetch(`/data`);
-    const imageResponse = await fetch(`/image`);
+    const jsonResponse = await fetch(`http://localhost:${port}/data`);
+    const imageResponse = await fetch(`http://localhost:${port}/image`);
     if (jsonResponse.ok && imageResponse.ok) {
       const jsonData = await jsonResponse.json();
       const todos = jsonData;
       const imageBlob = await imageResponse.blob();
       const imageUrl = URL.createObjectURL(imageBlob);
-      let html = `<img src=${imageUrl} alt='image'>`;  
+      let html = `<html><body><img src=${imageUrl} alt='image'></body></html>`;  
       html += "<ul>";  
       for (const item of todos) {
         html += `<li>${sanitizeHtml(item)}</li>`;
       }
       html += "</ul><input>";
-      html += "<button>Add</button>";
+      html += "<button>Add</button></body></html>";
       document.body.innerHTML = html;
       isFirstRender = false;
     } else {
-      document.body.innerHTML = "<p>Something went wrong.</p>";
+      document.body.innerHTML = "<html><body><p>Something went wrong.</p></body></html>";
     }
   } else {
     let html = "<ul>";
@@ -53,7 +54,7 @@ export function addEventListeners() {
       body: JSON.stringify({ item }),
     });
     if (response.ok) {
-      render(document, todos, port);
+      render(document, todos);
     } else {
       console.error("Something went wrong.");
     }
