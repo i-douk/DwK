@@ -7,7 +7,7 @@ import { render } from "./client.js";
 
 
 // fetch and save image every hour
-import { fetchAndSaveImage } from "./utils-deprecated.ts";
+import { fetchAndSaveImage } from "./utils.ts";
 const basePath = "./images";
 const imageSource = "https://picsum.photos/1200";
 const imageFilePath = `${basePath}/image.png`;

@@ -29,7 +29,7 @@ export async function render(document, todos) {
       for (const item of todos) {
         html += `<li>${sanitizeHtml(item)}</li>`;
       }
-      html += "</ul><input>";
+      html += "</ul><input maxlength='140'>";
       html += "<button>Add</button></body></html>";
       document.body.innerHTML = html;
       isFirstRender = false;

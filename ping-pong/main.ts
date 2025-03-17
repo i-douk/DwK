@@ -1,5 +1,11 @@
 let count = 0;
-const log = await fetch(`http://logoutput-svc:2346/logs`).then(res => res.arrayBuffer());
+let log: ArrayBufferLike;
+try {
+   log = await fetch(`http://logoutput-svc.log-pingpong-ns:2346/logs`).then(res => res.arrayBuffer());
+} catch (error) {
+  console.error("Failed to fetch logs:", error);
+  log = new TextEncoder().encode("Logs unavailable").buffer;
+}
 const handler =  async (_req: Request): Promise<Response> => {
   const decoder = new TextDecoder();
   try {
