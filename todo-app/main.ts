@@ -1,4 +1,4 @@
-const port = 8081;
+const port = 8000;
 import { Application } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.36-alpha/deno-dom-wasm.ts";
@@ -51,6 +51,19 @@ router.get("/image", async (context) => {
   context.response.headers.set('Content-Type', 'image/png');
 });
 
+// serve css
+router.get("/index.css", async (context) => {
+  try {
+      const file = await Deno.readFile("./index.css");
+      context.response.body = file;
+      context.response.headers.set("Content-Type", "text/css");
+  } catch (error) {
+      console.error("Failed to read CSS file:", error);
+      context.response.status = 500;
+      context.response.body = "Internal Server Error";
+  }
+});
+
 // add todo
 router.post("/add", async (context) => {
   const { value } = await context.request.body({ type: "json" });
@@ -63,7 +76,7 @@ router.post("/add", async (context) => {
 const app = new Application();
 
 app.use(oakCors({
-  origin: [`http://localhost:${port}`, `http://localhost:8000`],
+  origin: [`http://localhost:${port}`],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
 }));
@@ -73,4 +86,4 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 
-await app.listen({ port : 8081 });
+await app.listen({ port });

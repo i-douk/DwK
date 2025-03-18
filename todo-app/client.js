@@ -1,4 +1,4 @@
-const port = 8081;
+const port = 8000;
 let isFirstRender = true;
 
 // Simple HTML sanitization to prevent XSS vulnerabilities.
@@ -24,7 +24,8 @@ export async function render(document, todos) {
       const todos = jsonData;
       const imageBlob = await imageResponse.blob();
       const imageUrl = URL.createObjectURL(imageBlob);
-      let html = `<html><body><img src=${imageUrl} alt='image'></body></html>`;  
+      let html = `<html><h1>Todo - DevOps with Kubernetes Course</h1>`;
+      html+= `<body><img src=${imageUrl} alt='image'></body></html>` 
       html += "<ul>";  
       for (const item of todos) {
         html += `<li>${sanitizeHtml(item)}</li>`;
