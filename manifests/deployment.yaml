@@ -30,6 +30,17 @@ spec:
               mountPath: /usr/src/app/files
         - name: pingpong-container
           image: pingpong-app:latest
+          env:
+            - name: FILE_CONTENT
+              valueFrom:
+                configMapKeyRef:
+                  name: pingpong-configmap
+                  key: information.txt
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: pingpong-configmap
+                  key: message
           # volumeMounts:
           #   - name: logoutput-volume
           #     mountPath: /usr/src/app/files

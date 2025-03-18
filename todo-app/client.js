@@ -1,4 +1,4 @@
-const port = 8000;
+const port = 8081;
 let isFirstRender = true;
 
 // Simple HTML sanitization to prevent XSS vulnerabilities.
