@@ -25,4 +25,4 @@ spec:
     - protocol: TCP
       port: 2347
       targetPort: 4247
-  type: LoadBalancer
+  type: ClusterIP

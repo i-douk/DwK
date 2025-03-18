@@ -2,10 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: logoutput-ingress
-  namespace : log-pingpong-ns
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  namespace: log-pingpong-ns
 spec:
   rules:
   - http:
@@ -24,10 +21,3 @@ spec:
             name: pingpong-svc
             port:
               number: 2347
-      - path: /?(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: todo-svc
-            port:
-              number: 2345
