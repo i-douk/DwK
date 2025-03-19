@@ -1,3 +1,6 @@
+import { sql } from "./libs.ts";
+console.log(sql)
+console.log('connection established')
 let count = 0;
 let log: ArrayBufferLike;
 try {
