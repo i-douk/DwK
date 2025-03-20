@@ -4,7 +4,32 @@ import { Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.36-alpha/deno-dom-wasm.ts";
 import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
 import { render } from "./client.js";
+import { Client } from "https://deno.land/x/postgres@v0.19.3/mod.ts";
 
+// db connection
+const sql = new Client({
+    user: "postgres",
+    database: "postgres",
+    hostname: "postgres-svc.log-pingpong-ns.svc.cluster.local",
+    port: 5432,
+    password: Deno.env.get('POSTGRES_PASSWORD'),
+});
+
+//save todo to db
+async function saveTodo(task: string) {
+  await sql.connect()
+  try {
+    await sql.queryObject`
+      INSERT INTO todos (task)
+      VALUES (${task})
+    `;
+    console.log("todo saved successfully");
+  } catch (error) {
+    console.error("Failed to save todo:", error);
+  } finally {
+    await sql.end();
+  }
+}
 
 // fetch and save image every hour
 import { fetchAndSaveImage } from "./utils.ts";
@@ -68,6 +93,12 @@ router.get("/index.css", async (context) => {
 router.post("/add", async (context) => {
   const { value } = await context.request.body({ type: "json" });
   const { item } = await value;
+  try {
+    await saveTodo(item)
+    console.log('todo saved to db')
+  } catch (error) {
+      console.log(error)
+  }
   todos.push(item);
   context.response.status = 200;
 });

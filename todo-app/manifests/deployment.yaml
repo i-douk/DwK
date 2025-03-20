@@ -23,3 +23,14 @@ spec:
           volumeMounts:
             - name: image-volume
               mountPath: /usr/src/app/images
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-configmap
+                  key: port
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: SECRET 

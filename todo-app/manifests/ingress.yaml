@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: todo-ingress
   namespace: todo-ns
+
 spec:
   rules:
   - http:

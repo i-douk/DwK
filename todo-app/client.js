@@ -1,6 +1,7 @@
 const port = 8081;
 let isFirstRender = true;
 
+
 // Simple HTML sanitization to prevent XSS vulnerabilities.
 function sanitizeHtml(text) {
   return text
@@ -57,6 +58,7 @@ export function addEventListeners() {
   document.querySelector("button").addEventListener("click", async () => {
     const item = document.querySelector("input").value;
     const todos = Array.from(document.querySelectorAll("li"), e => e.innerText);
+   
     todos.push(item);
     const response = await fetch("/add", {
       method: "POST",
