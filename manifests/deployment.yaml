@@ -41,6 +41,11 @@ spec:
                 configMapKeyRef:
                   name: pingpong-configmap
                   key: message
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: SECRET 
           # volumeMounts:
           #   - name: logoutput-volume
           #     mountPath: /usr/src/app/files
