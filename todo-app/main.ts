@@ -8,12 +8,27 @@ import { Client } from "https://deno.land/x/postgres@v0.19.3/mod.ts";
 
 // db connection
 const sql = new Client({
-    user: "postgres",
-    database: "postgres",
-    hostname: "postgres-svc.todo-ns.svc.cluster.local",
-    port: 5432,
+    user: Deno.env.get('USER'),
+    database: Deno.env.get('DB'),
+    hostname: Deno.env.get('HOST'),
+    port: Number(Deno.env.get('DB_PORT')),
     password: Deno.env.get('POSTGRES_PASSWORD'),
 });
+
+// fetch todos from db
+async function fetchTodos() {
+  await sql.connect();
+  try {
+    await sql.queryObject`
+     SELECT * FROM todos
+    `
+  } catch(error){
+    console.log(error)
+  } finally {
+    sql.end()
+  }
+}
+const todos = await fetchTodos()
 
 //save todo to db
 async function saveTodo(task: string) {
@@ -41,7 +56,7 @@ setInterval(fetchAndSaveImage, 1000 * 60 * 60);
 
 // read html content
 const html = await Deno.readTextFile("./client.html");
-const todos = ['Todo 1', 'Todo 2', 'Todo 3'];
+// const todos = ['Todo 1', 'Todo 2', 'Todo 3'];
 const router = new Router();
 
 // serve client.js

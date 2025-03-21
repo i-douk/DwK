@@ -29,7 +29,7 @@ export async function render(document, todos) {
       html+= `<body><img src=${imageUrl} alt='image'></body></html>` 
       html += "<ul>";  
       for (const item of todos) {
-        html += `<li>${sanitizeHtml(item)}</li>`;
+        html += `<li>${sanitizeHtml(item.task)}</li>`;
       }
       html += "</ul><input maxlength='140'>";
       html += "<button>Add</button></body></html>";
@@ -43,7 +43,7 @@ export async function render(document, todos) {
     if (ulElement) {
       let html = "<ul>";
       for (const item of todos) {
-        html += `<li>${sanitizeHtml(item)}</li>`;
+        html += `<li>${sanitizeHtml(item.task)}</li>`;
       }
       html += "</ul>";
       ulElement.outerHTML = html;

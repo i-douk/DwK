@@ -5,3 +5,8 @@ metadata:
   namespace: todo-ns
 data:
   port: "8081"
+  user: "postgres"
+  db: "postgres"
+  db-port: "5432"
+  host: "postgres-svc.todo-ns.svc.cluster.local"
+
