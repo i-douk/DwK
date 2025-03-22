@@ -30,6 +30,41 @@ async function fetchTodos() {
   }
 }
 
+//create db if if doesn't exit
+async function createTodosTable () {
+  await sql.connect();
+  try {
+    // Check if the todos table exists
+    const tableExists = await sql.queryObject`
+      SELECT EXISTS (
+        SELECT FROM pg_tables
+        WHERE schemaname = 'public'
+        AND tablename = 'todos'
+      );
+    `;
+
+    // If the table doesn't exist, create it
+    if (!tableExists.rows[0].exists) {
+      await sql.queryObject`
+        CREATE TABLE todos (
+          id SERIAL PRIMARY KEY,
+          task TEXT NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+      `;
+      console.log("Todos table created.");
+    } else {
+      console.log("Todos table already exists.");
+    }
+  } catch (error) {
+    console.error("Failed to check or create todos table:", error);
+  } finally {
+    await sql.end();
+  }
+}
+ 
+await createTodosTable()
+
 //save todo to db
 async function saveTodo(task: string) {
   await sql.connect()
@@ -56,7 +91,15 @@ setInterval(fetchAndSaveImage, 1000 * 60 * 60);
 
 // read html content
 const html = await Deno.readTextFile("./client.html");
-const todos = await fetchTodos() || [{ task : 'Enter your todos here'}];
+let todos = await fetchTodos() || [{ task : 'Enter your todos here'}];
+// Poll the database every 5 seconds
+setInterval(async () => {
+  const updatedTodos = await fetchTodos();
+  if (updatedTodos) {
+    todos = updatedTodos;
+    console.log("Todos updated:", todos);
+  }
+}, 60000*30); 
 const router = new Router();
 
 // serve client.js
