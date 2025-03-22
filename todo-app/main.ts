@@ -19,16 +19,16 @@ const sql = new Client({
 async function fetchTodos() {
   await sql.connect();
   try {
-    await sql.queryObject`
+    const result = await sql.queryObject`
      SELECT * FROM todos
     `
+    return result.rows
   } catch(error){
     console.log(error)
   } finally {
     sql.end()
   }
 }
-const todos = await fetchTodos()
 
 //save todo to db
 async function saveTodo(task: string) {
@@ -56,7 +56,7 @@ setInterval(fetchAndSaveImage, 1000 * 60 * 60);
 
 // read html content
 const html = await Deno.readTextFile("./client.html");
-// const todos = ['Todo 1', 'Todo 2', 'Todo 3'];
+const todos = await fetchTodos() || [{ task : 'Enter your todos here'}];
 const router = new Router();
 
 // serve client.js
@@ -114,7 +114,7 @@ router.post("/add", async (context) => {
   } catch (error) {
       console.log(error)
   }
-  todos.push(item);
+  todos.push({ task : item});
   context.response.status = 200;
 });
 
